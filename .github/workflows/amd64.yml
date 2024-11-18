@@ -26,7 +26,7 @@ jobs:
         IFS=',' read -r -a image_array <<< "$images"
         for image in "${image_array[@]}"; do
           docker pull "${image}" --platform "linux/amd64"
-          docker tags "${image}" crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/"${image}"
+          docker tag "${image}" crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/"${image}"
           docker save "${image}" -o "${image//\//_}-amd64.tar"
         done
 
