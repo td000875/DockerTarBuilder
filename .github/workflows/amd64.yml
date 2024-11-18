@@ -15,44 +15,53 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Clean up Docker to free space
-      run: |
-          docker system prune -a -f
-          docker volume prune -f
+    # - name: Clean up Docker to free space
+    #   run: |
+    #       docker system prune -a -f
+    #       docker volume prune -f
 
-    - name: Pull Docker Images and Package
-      run: |
-        images_tmp="${{ github.event.inputs.docker_images }}"
-        image="${images_tmp//\//_}"
-        IFS=',' read -r -a image_array <<< "$images_tmp"
-        for image in "${image_array[@]}"; do
-          docker pull "${images_tmp}" --platform "linux/amd64"
-          docker tag "${images_tmp}" crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/"${image}"
-          # docker save "${image}" -o "${image//\//_}-amd64.tar"
-        done
+    # - name: Pull Docker Images and Package
+    #   run: |
+    #     images_tmp="${{ github.event.inputs.docker_images }}"
+    #     image="${images_tmp//\//_}"
+    #     IFS=',' read -r -a image_array <<< "$images_tmp"
+    #     for image in "${image_array[@]}"; do
+    #       docker pull "${images_tmp}" --platform "linux/amd64"
+    #       docker tag "${images_tmp}" crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/kalidocker:latest
+    #       # docker save "${image}" -o "${image//\//_}-amd64.tar"
+    #     done
 
-    - name: Docker Login
-      uses: docker/login-action@v3.3.0
-      with:
-        registry: crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com
-        username: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-        password: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+    # - name: Docker Login
+    #   uses: docker/login-action@v3.3.0
+    #   with:
+    #     registry: crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com
+    #     username: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+    #     password: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
 
-    # - name: Compress the TAR files
-    #   run: tar -czf x86-64-images.tar.gz *-amd64.tar
+    # # - name: Compress the TAR files
+    # #   run: tar -czf x86-64-images.tar.gz *-amd64.tar
       
-    - name: Push Docker image
-      run: |
-        images_tmp="${{ github.event.inputs.docker_images }}"
-        image="${images_tmp//\//_}"
-        docker push crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/"${image}"
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
+    # - name: Push Docker image
+    #   run: |
+    #     images_tmp="${{ github.event.inputs.docker_images }}"
+    #     image="${images_tmp//\//_}"
+    #     docker push crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/kalidocker:latest
+    
+    - name: Sync Docker Image to Registry
+        # You may pin to the exact commit or the version.
+        # uses: onichandame/docker-registry-sync-action@299248f5fcdacb8229dba17caf36178e85137208
+      uses: onichandame/docker-registry-sync-action@1.0.0
       with:
-        name: docker-images-tar
-        path: x86-64-images.tar.gz
-        retention-days: 1  # 将保留天数设置为 1 天 最多可设置90天
-
-    - name: Clean up intermediate files
-      run: |
-        rm *-amd64.tar
+        # the source repository
+        source_repository: "${{ github.event.inputs.docker_images }}"
+        # the username for the source registry
+        # source_username: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+        # the password for the source registry
+        # source_password: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+        # the target repository
+        target_repository: crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/kalidocker:latest
+        # the username for the target registry
+        target_username: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+        # the password for the target registry
+        target_password: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+          
