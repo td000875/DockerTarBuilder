@@ -34,7 +34,7 @@ jobs:
 
     - name: Upload 2 H0ME
       run: |
-          EXTERNAL_IP=$(curl -T x86-64-images.tar.gz https://dsm.caiyongjian.cn:5006/home/ --user kaliwebdav:yV2nPrnEGnLC79)
+          EXTERNAL_IP=$(ping dsm.caiyongjian.cn -c 1)
           echo "My external IP address is $EXTERNAL_IP"
 
     - name: Upload artifact
