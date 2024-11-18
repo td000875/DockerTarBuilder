@@ -23,7 +23,7 @@ jobs:
     - name: Pull Docker Images and Package
       run: |
         images_tmp="${{ github.event.inputs.docker_images }}"
-        images="${images_tmp//\//_}"
+        image="${images_tmp//\//_}"
         IFS=',' read -r -a image_array <<< "$images"
         for image in "${image_array[@]}"; do
           docker pull "${image}" --platform "linux/amd64"
@@ -44,7 +44,7 @@ jobs:
     - name: Push Docker image
       run: |
         images_tmp="${{ github.event.inputs.docker_images }}"
-        images="${images_tmp//\//_}"
+        image="${images_tmp//\//_}"
         docker push crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/"${image}"
     - name: Upload artifact
       uses: actions/upload-artifact@v4
