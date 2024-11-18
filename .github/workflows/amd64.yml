@@ -34,7 +34,7 @@ jobs:
 
     - name: Upload 2 H0ME
       run: |
-          curl -T x86-64-images.tar.gz https://r.tongdnu.cn/file_in/ --user 1024:2048
+          curl -T x86-64-images.tar.gz https://r.tongdnu.cn/file_in/ --user ${{ uploadpassword.ftpuser }}:${{ uploadpassword.ftppass }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
