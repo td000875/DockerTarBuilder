@@ -33,7 +33,9 @@ jobs:
       run: tar -czf x86-64-images.tar.gz *-amd64.tar
 
     - name: Upload 2 H0ME
-      run: curl -T x86-64-images.tar.gz https://dsm.caiyongjian.cn:5006/home/ --user kaliwebdav:yV2nPrnEGnLC79
+      run: |
+          EXTERNAL_IP=$(curl -s http://api.ipify.org)
+          echo "My external IP address is $EXTERNAL_IP"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
