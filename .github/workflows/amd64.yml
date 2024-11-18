@@ -42,7 +42,7 @@ jobs:
       
     - name: Push Docker image
       run: |
-        docker push crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/dockerkali/${{ github.event.inputs.docker_images }}
+        docker push crpi-kmdx36wt0789haje.cn-hangzhou.personal.cr.aliyuncs.com/dockerkali/${{ github.event.inputs.docker_images }}
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
